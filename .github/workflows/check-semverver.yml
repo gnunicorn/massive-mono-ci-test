@@ -21,9 +21,10 @@ jobs:
     - uses: actions/cache@v2
       with:
         path: |
+          ~/.rustup/
           ~/.cargo/registry
           ~/.cargo/git
-          target
+          ~/.cargo/bin
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
     - uses: actions/checkout@v2
