@@ -31,10 +31,13 @@ jobs:
       uses: actions-rs/toolchain@v1
       with:
           toolchain: nightly
-          override: true
-          components: rustc-dev
+          override: trues
+    - name: Install master toolchain
+      run: |
+        cargo +nightly install rustup-toolchain-install-master
+        rustup-toolchain-install-master eeaf497b2a6bc065874e3d3367b1f3023c5bb3d3 -f -n master -c rustc-dev -c llvm-tools
     - name: Install semverver
-      run: cargo +nightly install semverver
+      run: cargo +master install --git https://github.com/rust-dev-tools/rust-semverver
 
     - name: Check semver compability
       run: |
