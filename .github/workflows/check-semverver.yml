@@ -52,5 +52,5 @@ jobs:
           members=("primitives/api" "client/client" "frame/runtime" "bin/binary" "examples/simple-node" "tests/chaosneet")
 
           for member in ${members[@]}; do
-              cargo semver --stable-path "$GITHUB_WORKSPACE/stable/${member}" --current-path "$GITHUB_WORKSPACE/new/${member}"
+              cargo semver --stable-path "$GITHUB_WORKSPACE/stable/${member}/Cargo.toml" --current-path "$GITHUB_WORKSPACE/new/${member}/Cargo.toml"
           done
