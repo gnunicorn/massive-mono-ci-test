@@ -1,0 +1,10 @@
+[workspace]
+members = [
+  "primitives/api",
+  "client/client",
+  "frame/runtime",
+  "bin/binary",
+
+  "examples/simple-node",
+  "tests/chaosneet",
+]
