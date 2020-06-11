@@ -9,6 +9,6 @@ mod tests {
     use super::add;
     #[test]
     fn it_works() {
-        assert_eq!(add(2,  2), 4);
+        assert_eq!(add(2,  2), 5);
     }
 }
