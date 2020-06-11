@@ -53,9 +53,11 @@ jobs:
 
     - name: Check semver compability
       run: |
+        cd new
         members=(`grep -Eo '"[^"]+"' Cargo.toml | tr -d '"'`)
         changes=`git diff --name-only stable..`
-
+        cd ..
+        
         for member in ${members[@]}; do
             if [[ "${changes}" =~ "${member}" ]]; then
                 echo "-- ${member} changed. Checking semver"
