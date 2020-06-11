@@ -3,8 +3,7 @@
 name: check for semver
 
 env:
-  INSTALL_VERSION: nightly-2020-06-02
-  RUN_VERSION: nightly-2020-06-01
+  NIGHTLY_VERSION: nightly-2020-06-02
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -39,23 +38,23 @@ jobs:
     - uses: actions/checkout@v2
       with:
         path: new
-    - name: Install latest nightly
+    - name: Install nightly
       uses: actions-rs/toolchain@v1
       with:
-          toolchain: ${{ env.INSTALL_VERSION }}
-          override: trues
-          components: rustc-dev llvm-tools-preview
+          toolchain: ${{ env.NIGHTLY_VERSION }}
+          override: true
+          components: rustc-dev, llvm-tools-preview
     # - name: Install master toolchain
     #   run: |
     #     cargo +nightly install rustup-toolchain-install-master
     #     rustup-toolchain-install-master eeaf497b2a6bc065874e3d3367b1f3023c5bb3d3 -f -n master -c rustc-dev -c llvm-tools
     - name: Install semverver
-      run: cargo +${{ env.RUN_VERSION }} install --git https://github.com/rust-dev-tools/rust-semverver
+      run: cargo +${{ env.NIGHTLY_VERSION }} install --git https://github.com/rust-dev-tools/rust-semverver
 
     - name: Check semver compability
       run: |
           members=("client/client" ) # "frame/runtime" "examples/simple-node" "tests/chaosneet")
 
           for member in ${members[@]}; do
-              cargo +${{ env.RUN_VERSION }} semver --stable-path "$GITHUB_WORKSPACE/stable/${member}/Cargo.toml" --current-path "$GITHUB_WORKSPACE/new/${member}/Cargo.toml"
+              cargo +${{ env.NIGHTLY_VERSION }} semver --stable-path "$GITHUB_WORKSPACE/stable/${member}/Cargo.toml" --current-path "$GITHUB_WORKSPACE/new/${member}/Cargo.toml"
           done
