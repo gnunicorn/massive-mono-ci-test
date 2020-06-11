@@ -28,7 +28,7 @@ jobs:
           ~/.cargo/registry
           ~/.cargo/git
           ~/.cargo/bin
-        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        key: ${{ runner.os }}-cargo-${{ env.NIGHTLY_VERSION }}-${{ hashFiles('**/Cargo.lock') }}
 
     - uses: actions/checkout@v2
       with:
@@ -49,7 +49,7 @@ jobs:
     #     cargo +nightly install rustup-toolchain-install-master
     #     rustup-toolchain-install-master eeaf497b2a6bc065874e3d3367b1f3023c5bb3d3 -f -n master -c rustc-dev -c llvm-tools
     - name: Install semverver
-      run: cargo +${{ env.NIGHTLY_VERSION }} install --git https://github.com/rust-dev-tools/rust-semverver
+      run: command -v cargo-semver || cargo +${{ env.NIGHTLY_VERSION }} install --git https://github.com/rust-dev-tools/rust-semverver
 
     - name: Check semver compability
       run: |
