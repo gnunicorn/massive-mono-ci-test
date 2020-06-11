@@ -71,7 +71,7 @@ jobs:
                 new_version=`cat changes.json | jq .new_version -M`;
                 if [ "$new_version" != "null" ] ; then
                   echo "Bumping ${member} to $new_version"
-                  sed -i '0,/^version.*$/s//version = $new_version/'  "$GITHUB_WORKSPACE/new/${member}/Cargo.toml"
+                  sed -i "0,/^version.*\$/s//version = $new_version/" "$GITHUB_WORKSPACE/new/${member}/Cargo.toml"
                 else
                   echo "No update necessary"
                 fi
@@ -82,12 +82,12 @@ jobs:
       
     - name: Submit new Versions
       run: |
-        git config --global user.name '${GITHUB_ACTOR}'
-        git config --global user.email '${GITHUB_ACTOR}@users.noreply.github.com'
+        git config --global user.name "${GITHUB_ACTOR}"
+        git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         cd new
         if ! git diff-index --quiet HEAD --; then
-          git status
           git add **/Cargo.toml
+          git status
           git commit -m"Bumping versions"
           git push -u origin HEAD
         fi
