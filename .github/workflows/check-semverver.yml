@@ -54,6 +54,7 @@ jobs:
     - name: Check semver compability
       run: |
         cd new
+        git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
         members=(`grep -Eo '"[^"]+"' Cargo.toml | tr -d '"'`)
         changes=`git diff --name-only origin/${{ github.base_ref }} HEAD`
         cd ..
