@@ -37,6 +37,7 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
       with:
+        ref: ${{ github.event.pull_request.head.sha }}
         path: new
     - name: Install nightly
       uses: actions-rs/toolchain@v1
