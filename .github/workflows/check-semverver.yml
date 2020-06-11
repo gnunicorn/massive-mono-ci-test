@@ -55,9 +55,9 @@ jobs:
       run: |
         cd new
         members=(`grep -Eo '"[^"]+"' Cargo.toml | tr -d '"'`)
-        changes=`git diff --name-only stable..`
+        changes=`git diff --name-only ${{ github.base_ref }}..`
         cd ..
-        
+
         for member in ${members[@]}; do
             if [[ "${changes}" =~ "${member}" ]]; then
                 echo "-- ${member} changed. Checking semver"
