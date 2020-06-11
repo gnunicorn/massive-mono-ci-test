@@ -53,8 +53,31 @@ jobs:
 
     - name: Check semver compability
       run: |
-          members=("client/client" ) # "frame/runtime" "examples/simple-node" "tests/chaosneet")
+      members=(`grep -Eo '"[^"]+"' Cargo.toml | tr -d '"'`)
+      changes=`git diff --name-only stable..`
 
-          for member in ${members[@]}; do
-              cargo +${{ env.NIGHTLY_VERSION }} semver --stable-path "$GITHUB_WORKSPACE/stable/${member}/Cargo.toml" --current-path "$GITHUB_WORKSPACE/new/${member}/Cargo.toml"
-          done
+      for member in ${members[@]}; do
+          if [[ "${changes}" =~ "${member}" ]]; then
+              echo "-- ${member} changed. Checking semver"
+              cargo +${{ env.NIGHTLY_VERSION }} semver \
+                --stable-path "$GITHUB_WORKSPACE/stable/${member}/Cargo.toml" \
+                --current-path "$GITHUB_WORKSPACE/new/${member}/Cargo.toml" \
+                -j > changes.json
+              cat changes.json
+              new_version=`cat changes.json | jq .new_version -M`;
+              if [[ "$new_version" -ne "null" ]] ; then
+                echo "Bumping ${member} to $new_version"
+                sed -i '0,/^version.*$/s//version = "2.1.0"/' "$GITHUB_WORKSPACE/new/${member}/Cargo.toml"
+              else
+                echo "No update necessary"
+              fi
+          else
+              echo "Skipped ${member} -- not modified"
+          fi
+      done
+      
+      cd new
+      git status
+      git add **/Cargo.toml
+      git commit -m"Bumping versions"
+
