@@ -55,7 +55,7 @@ jobs:
       run: |
         cd new
         members=(`grep -Eo '"[^"]+"' Cargo.toml | tr -d '"'`)
-        changes=`git diff --name-only origin/${{ github.base_ref }}..`
+        changes=`git diff --name-only origin/${{ github.base_ref }} HEAD`
         cd ..
 
         for member in ${members[@]}; do
