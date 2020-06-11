@@ -75,9 +75,17 @@ jobs:
                 echo "Skipped ${member} -- not modified"
             fi
         done
-        
+      
+    - name: Submit new Versions
+      secrets: ["GITHUB_TOKEN"]
+      run: |
+        git config --global user.name '${GITHUB_ACTOR}'
+        git config --global user.email '${GITHUB_ACTOR}@users.noreply.github.com'
         cd new
-        git status
-        git add **/Cargo.toml
-        git commit -m"Bumping versions"
+        if ! git diff-index --quiet HEAD --; then
+          git status
+          git add **/Cargo.toml
+          git commit -m"Bumping versions"
+          git push -u origin HEAD
+        fi
 
